@@ -45,7 +45,6 @@ class PlayState : public cgf::GameState
     int dirx;
     cgf::Sprite playSprite1;
     cgf::Sprite bulletSprite;
-    cgf::Sprite[]
     sf::RenderWindow* screen;
     cgf::InputManager* im;
 };
