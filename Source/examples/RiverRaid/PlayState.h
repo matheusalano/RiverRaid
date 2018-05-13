@@ -30,6 +30,7 @@ class PlayState : public cgf::GameState
     void draw(cgf::Game* game);
     int randomNumber(int min, int max);
     cgf::Sprite createEnemy();
+    cgf::Sprite createFuelTank();
 
     // Implement Singleton Pattern
     static PlayState* instance()
@@ -49,6 +50,7 @@ class PlayState : public cgf::GameState
     cgf::Sprite playSprite1;
     std::vector <cgf::Sprite> bullets;
     std::vector <cgf::Sprite> enemies;
+    std::vector <cgf::Sprite> fuelTanks;
     sf::RectangleShape fuelBackground;
     sf::RectangleShape fuel;
     float fuelLeft;

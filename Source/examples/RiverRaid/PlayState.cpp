@@ -102,8 +102,7 @@ void PlayState::handleEvents(cgf::Game* game)
             bulletSprite.load("data/img/bullet.png");
             bulletSprite.setScale(0.5, 0.5);
             float xPos = playSprite1.getPosition().x + (playSprite1.getSize().x / 2) - (bulletSprite.getSize().x / 2) * 0.5;
-            float yPos = playSprite1.getPosition().y - (playSprite1.getSize().y / 2) + (bulletSprite.getSize().y / 2) * 0.5;
-            bulletSprite.setPosition(xPos, yPos);
+            bulletSprite.setPosition(xPos, playSprite1.getPosition().y);
             bulletSprite.setYspeed(-200.0);
             bullets.push_back(bulletSprite);
         }
@@ -154,16 +153,28 @@ void PlayState::update(cgf::Game* game)
     sf::Vector2f fuelSize(300 * fuelLeft, 50);
     fuel.setSize(fuelSize);
 
-    for(int i = 0; i < enemies.size(); i++) {
-        for(int j = 0; j < bullets.size(); j++) {
-            if (enemies[i].bboxCollision(bullets[j])) {
-                enemies.erase(enemies.begin() + i);
-                bullets.erase(bullets.begin() + j);
+    for(int i = 0; i < bullets.size(); i++) {
+        bool isErased = false;
+        for(int j = 0; j < enemies.size(); j++) {
+            if (bullets[i].bboxCollision(enemies[j])) {
+                bullets.erase(bullets.begin() + i);
+                enemies.erase(enemies.begin() + j);
+                isErased = true;
+                break;
             }
         }
-    }
+        if (isErased) continue;
 
-    for(int i = 0; i < bullets.size(); i++) {
+        for(int k = 0; k < fuelTanks.size(); k++) {
+            if (bullets[i].bboxCollision(fuelTanks[k])) {
+                bullets.erase(bullets.begin() + i);
+                fuelTanks.erase(fuelTanks.begin() + k);
+                isErased = true;
+                break;
+            }
+        }
+        if (isErased) continue;
+
         if (bullets[i].getPosition().y <= 0) {
             bullets.erase(bullets.begin() + i);
         } else {
@@ -189,8 +200,23 @@ void PlayState::update(cgf::Game* game)
         enemies[i].update(game->getUpdateInterval());
     }
 
-    if (enemies.size() <= 4 && randomNumber(1, 100) <= 5) {
+    for(int i = 0; i < fuelTanks.size(); i++) {
+        if(playSprite1.circleCollision(fuelTanks[i])) {
+            fuelTanks.erase(fuelTanks.begin() + i);
+            fuelLeft = min(fuelLeft + 0.2, 1.0);
+            sf::Vector2f fuelSize(300 * fuelLeft, 50);
+            fuel.setSize(fuelSize);
+        } else if (fuelTanks[i].getPosition().y + fuelTanks[i].getSize().y >= 600) {
+            fuelTanks.erase(fuelTanks.begin() + i);
+        }
+        fuelTanks[i].update(game->getUpdateInterval());
+    }
+
+    if (enemies.size() <= 3 && randomNumber(1, 500) <= 5) {
         enemies.push_back(createEnemy());
+    }
+    if (fuelTanks.size() <= 1 && randomNumber(1,500) <= 3) {
+        fuelTanks.push_back(createFuelTank());
     }
 }
 
@@ -205,6 +231,9 @@ void PlayState::draw(cgf::Game* game)
     for(int i = 0; i < enemies.size(); i++) {
         screen->draw(enemies[i]);
     }
+    for(int i = 0; i < fuelTanks.size(); i++) {
+        screen->draw(fuelTanks[i]);
+    }
 
     screen->draw(fuelBackground);
     screen->draw(fuel);
@@ -218,10 +247,20 @@ int PlayState::randomNumber(int min, int max) {
 
 cgf::Sprite PlayState::createEnemy() {
     cgf::Sprite enemySprite;
-    enemySprite.load("data/img/enemy.png");
+    string enemyFilePath = "data/img/enemy" + std::to_string(randomNumber(1, 3)) + ".png";
+    enemySprite.load(enemyFilePath.c_str());
     float xPos = randomNumber(150, 600);
-    enemySprite.setPosition(xPos, 10);
+    enemySprite.setPosition(xPos, 5);
     enemySprite.setYspeed(30.0);
     enemySprite.setXspeed(100.0);
     return enemySprite;
+}
+
+cgf::Sprite PlayState::createFuelTank() {
+    cgf::Sprite fuelSprite;
+    fuelSprite.load("data/img/fuel.png");
+    float xPos = randomNumber(150, 600);
+    fuelSprite.setPosition(xPos, 5);
+    fuelSprite.setYspeed(40.0);
+    return fuelSprite;
 }
