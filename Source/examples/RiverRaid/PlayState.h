@@ -13,6 +13,7 @@
 #include "GameState.h"
 #include "Sprite.h"
 #include "InputManager.h"
+#include <vector>
 
 class PlayState : public cgf::GameState
 {
@@ -27,6 +28,8 @@ class PlayState : public cgf::GameState
     void handleEvents(cgf::Game* game);
     void update(cgf::Game* game);
     void draw(cgf::Game* game);
+    int randomNumber(int min, int max);
+    cgf::Sprite createEnemy();
 
     // Implement Singleton Pattern
     static PlayState* instance()
@@ -44,7 +47,15 @@ class PlayState : public cgf::GameState
 
     int dirx;
     cgf::Sprite playSprite1;
-    cgf::Sprite bulletSprite;
+    std::vector <cgf::Sprite> bullets;
+    std::vector <cgf::Sprite> enemies;
+    sf::RectangleShape fuelBackground;
+    sf::RectangleShape fuel;
+    float fuelLeft;
+    sf::Font font;
+    sf::Text fuelText;
+    sf::Text lifesText;
+    int lifesLeft;
     sf::RenderWindow* screen;
     cgf::InputManager* im;
 };

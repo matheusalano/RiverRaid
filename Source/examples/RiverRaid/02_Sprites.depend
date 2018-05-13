@@ -4693,10 +4693,11 @@
 	<SFML/System/Time.hpp>
 	<SFML/System/Clock.hpp>
 
-1526148883 /home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.h
+1526166889 /home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.h
 	"GameState.h"
 	"Sprite.h"
 	"InputManager.h"
+	<vector>
 
 1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/GameState.h
 	"Game.h"
@@ -4736,7 +4737,7 @@
 	<map>
 	<SFML/Graphics.hpp>
 
-1526148822 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.cpp
+1526168191 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.cpp
 	<iostream>
 	<cmath>
 	"Game.h"
