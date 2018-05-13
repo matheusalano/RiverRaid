@@ -2,8 +2,8 @@
  *  PlayState.h
  *  Normal "play" state
  *
- *  Created by Marcelo Cohen on 08/13.
- *  Copyright 2013 PUCRS. All rights reserved.
+ *  Created by Gustavo de Lima, Matheus Alano and Matheus Britzke
+ *  Copyright 2018 PUCRS. All rights reserved.
  *
  */
 

@@ -1,7 +1,7 @@
 /*
- * Exemplo de uso do framework de jogo
  *
- * Cria um jogo com 3 estados: "menu", "play" e "pause"
+ *  Created by Gustavo de Lima, Matheus Alano and Matheus Britzke
+ *  Copyright 2018 PUCRS. All rights reserved.
  *
  */
 
