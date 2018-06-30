@@ -11,6 +11,7 @@
 #include <cmath>
 #include "Game.h"
 #include "PlayState.h"
+#include "PauseState.h"
 #include "InputManager.h"
 
 PlayState PlayState::m_PlayState;
@@ -24,12 +25,12 @@ void PlayState::init()
     map = new tmx::MapLoader("data/maps");
     map->Load("mapBackup.tmx");
 
-    playSprite1.load("data/img/spaceship.png");
+    playSprite1.loadXML("data/img/player.xml");
     playSprite1.setPosition(369, 430);
     playSprite1.setFrameRange(0,15);
-    playSprite1.setAnimRate(15);
+    playSprite1.setAnimRate(30);
     playSprite1.setLooped(true);
-    playSprite1.pause();
+    playSprite1.play();
 
     fuelLeft = 1.0;
     sf::Vector2f fuelSize(300 * fuelLeft, 50);
@@ -111,6 +112,9 @@ void PlayState::handleEvents(cgf::Game* game)
         if(event.type == sf::Event::Closed)
             game->quit();
 
+        if(event.key.code == sf::Keyboard::P)
+            game->pushState(PauseState::instance());
+
         if(event.type == sf::Event::KeyPressed && im->testEvent("space")) {
             cgf::Sprite bulletSprite;
             bulletSprite.load("data/img/bullet.png");
@@ -129,7 +133,6 @@ void PlayState::handleEvents(cgf::Game* game)
             dirx--;
         }
         if (!playSprite1.getMirror()) playSprite1.setMirror(true);
-        if (playSprite1.isPaused()) playSprite1.play();
     }
 
 
@@ -138,7 +141,6 @@ void PlayState::handleEvents(cgf::Game* game)
             dirx++;
         }
         if (playSprite1.getMirror()) playSprite1.setMirror(false);
-        if (playSprite1.isPaused()) playSprite1.play();
     }
 
     if(im->testEvent("quit"))
@@ -146,8 +148,6 @@ void PlayState::handleEvents(cgf::Game* game)
 
     if(im->testEvent("stats"))
         game->toggleStats();
-
-    if(dirx == 0 && playSprite1.isPlaying()) playSprite1.pause();
 
     playSprite1.setXspeed(200*dirx);
 }
