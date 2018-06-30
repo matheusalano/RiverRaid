@@ -21,6 +21,9 @@ void PlayState::init()
 {
     srand( time(NULL) );
 
+    map = new tmx::MapLoader("data/maps");
+    map->Load("mapBackup.tmx");
+
     playSprite1.load("data/img/spaceship.png");
     playSprite1.setPosition(369, 430);
     playSprite1.setFrameRange(0,15);
@@ -59,7 +62,17 @@ void PlayState::init()
     lifesText.setPosition(190, 525);
     lifesText.setStyle(sf::Text::Bold);
 
+    points = 0;
+
+    pointsText.setFont(font);
+    pointsText.setString(std::to_string(points));
+    pointsText.setCharacterSize(50);
+    pointsText.setFillColor(sf::Color::White);
+    pointsText.setPosition(620, 525);
+    pointsText.setStyle(sf::Text::Bold);
+
     dirx = 0;
+    lastEnemyPos = 400;
 
     im = cgf::InputManager::instance();
 
@@ -74,6 +87,7 @@ void PlayState::init()
 
 void PlayState::cleanup()
 {
+    delete map;
     cout << "PlayState: Clean" << endl;
 }
 
@@ -103,7 +117,7 @@ void PlayState::handleEvents(cgf::Game* game)
             bulletSprite.setScale(0.5, 0.5);
             float xPos = playSprite1.getPosition().x + (playSprite1.getSize().x / 2) - (bulletSprite.getSize().x / 2) * 0.5;
             bulletSprite.setPosition(xPos, playSprite1.getPosition().y);
-            bulletSprite.setYspeed(-200.0);
+            bulletSprite.setYspeed(-300.0);
             bullets.push_back(bulletSprite);
         }
     }
@@ -153,6 +167,15 @@ void PlayState::update(cgf::Game* game)
     sf::Vector2f fuelSize(300 * fuelLeft, 50);
     fuel.setSize(fuelSize);
 
+    if ((playSprite1.getPosition().x <= 128) || (playSprite1.getPosition().x + playSprite1.getSize().x >= 680)) {
+        lifesLeft--;
+        playSprite1.setPosition(369, 430);
+        enemies.clear();
+        fuelTanks.clear();
+        if (lifesLeft < 0) game->quit();
+        else lifesText.setString(std::to_string(lifesLeft));
+    }
+
     for(int i = 0; i < bullets.size(); i++) {
         bool isErased = false;
         for(int j = 0; j < enemies.size(); j++) {
@@ -160,6 +183,7 @@ void PlayState::update(cgf::Game* game)
                 bullets.erase(bullets.begin() + i);
                 enemies.erase(enemies.begin() + j);
                 isErased = true;
+                points = points + 30;
                 break;
             }
         }
@@ -170,6 +194,7 @@ void PlayState::update(cgf::Game* game)
                 bullets.erase(bullets.begin() + i);
                 fuelTanks.erase(fuelTanks.begin() + k);
                 isErased = true;
+                points = points + 80;
                 break;
             }
         }
@@ -190,10 +215,10 @@ void PlayState::update(cgf::Game* game)
             else lifesText.setString(std::to_string(lifesLeft));
         } else if (enemies[i].getPosition().y + enemies[i].getSize().y >= 600) {
             enemies.erase(enemies.begin() + i);
-        } else if (enemies[i].getPosition().x <= 100) {
+        } else if (enemies[i].getPosition().x <= 128) {
             enemies[i].setMirror(false);
             enemies[i].setXspeed(100.0);
-        } else if (enemies[i].getPosition().x + enemies[i].getSize().x >= 700) {
+        } else if (enemies[i].getPosition().x + enemies[i].getSize().x >= 680) {
             enemies[i].setMirror(true);
             enemies[i].setXspeed(-100.0);
         }
@@ -218,11 +243,13 @@ void PlayState::update(cgf::Game* game)
     if (fuelTanks.size() <= 1 && randomNumber(1,500) <= 3) {
         fuelTanks.push_back(createFuelTank());
     }
+    pointsText.setString(std::to_string(points));
 }
 
 void PlayState::draw(cgf::Game* game)
 {
     screen = game->getScreen();
+    map->Draw(*screen, 0);
     screen->draw(playSprite1);
 
     for(int i = 0; i < bullets.size(); i++) {
@@ -239,6 +266,7 @@ void PlayState::draw(cgf::Game* game)
     screen->draw(fuel);
     screen->draw(fuelText);
     screen->draw(lifesText);
+    screen->draw(pointsText);
 }
 
 int PlayState::randomNumber(int min, int max) {
@@ -249,10 +277,21 @@ cgf::Sprite PlayState::createEnemy() {
     cgf::Sprite enemySprite;
     string enemyFilePath = "data/img/enemy" + std::to_string(randomNumber(1, 3)) + ".png";
     enemySprite.load(enemyFilePath.c_str());
-    float xPos = randomNumber(150, 600);
+    float xPos;
+    if (lastEnemyPos > 375) xPos = randomNumber(150, 375);
+    else xPos = randomNumber(375, 600);
+    lastEnemyPos = xPos;
     enemySprite.setPosition(xPos, 5);
-    enemySprite.setYspeed(30.0);
-    enemySprite.setXspeed(100.0);
+    if (points > 800) {
+        enemySprite.setYspeed(40.0);
+        enemySprite.setXspeed(130.0);
+    }
+    else if (points > 200) {
+        enemySprite.setYspeed(20.0);
+        enemySprite.setXspeed(70.0);
+    } else {
+        enemySprite.setYspeed(30.0);
+    }
     return enemySprite;
 }
 

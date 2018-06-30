@@ -14,6 +14,7 @@
 #include "Sprite.h"
 #include "InputManager.h"
 #include <vector>
+#include <tmx/MapLoader.h>
 
 class PlayState : public cgf::GameState
 {
@@ -47,6 +48,7 @@ class PlayState : public cgf::GameState
     static PlayState m_PlayState;
 
     int dirx;
+    tmx::MapLoader* map;
     cgf::Sprite playSprite1;
     std::vector <cgf::Sprite> bullets;
     std::vector <cgf::Sprite> enemies;
@@ -57,7 +59,10 @@ class PlayState : public cgf::GameState
     sf::Font font;
     sf::Text fuelText;
     sf::Text lifesText;
+    sf::Text pointsText;
     int lifesLeft;
+    int points;
+    float lastEnemyPos;
     sf::RenderWindow* screen;
     cgf::InputManager* im;
 };

@@ -4172,7 +4172,7 @@
 	"PlayState.h"
 	"InputManager.h"
 
-1526148822 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/main.cpp
+1526253860 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/main.cpp
 	<iostream>
 	<cstdlib>
 	<string>
@@ -4693,11 +4693,12 @@
 	<SFML/System/Time.hpp>
 	<SFML/System/Clock.hpp>
 
-1526246956 /home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.h
+1530389208 /home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.h
 	"GameState.h"
 	"Sprite.h"
 	"InputManager.h"
 	<vector>
+	<tmx/MapLoader.h>
 
 1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/GameState.h
 	"Game.h"
@@ -4737,10 +4738,35 @@
 	<map>
 	<SFML/Graphics.hpp>
 
-1526250503 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.cpp
+1530389215 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.cpp
 	<iostream>
 	<cmath>
 	"Game.h"
 	"PlayState.h"
 	"InputManager.h"
+
+1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/tmx/MapLoader.h
+	<tmx/QuadTreeNode.h>
+	<iostream>
+	<pugixml/pugixml.hpp>
+
+1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/tmx/QuadTreeNode.h
+	<tmx/MapObject.h>
+	<memory>
+
+1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/tmx/MapObject.h
+	<string>
+	<vector>
+	<map>
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+	<tmx/Helpers.h>
+	"Debug.h"
+
+1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/tmx/Helpers.h
+	<math.h>
+	<SFML/Graphics/Rect.hpp>
+
+1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/Debug.h
+	<iostream>
 
