@@ -33,6 +33,8 @@ class PlayState : public cgf::GameState
     cgf::Sprite createEnemy();
     cgf::Sprite createFuelTank();
 
+    int points;
+
     // Implement Singleton Pattern
     static PlayState* instance()
     {
@@ -61,10 +63,18 @@ class PlayState : public cgf::GameState
     sf::Text lifesText;
     sf::Text pointsText;
     int lifesLeft;
-    int points;
     float lastEnemyPos;
     sf::RenderWindow* screen;
     cgf::InputManager* im;
+
+    sf::SoundBuffer gunSoundBuffer;
+    sf::Sound gunSound;
+
+    sf::SoundBuffer fuelSoundBuffer;
+    sf::Sound fuelSound;
+
+    sf::SoundBuffer enemySoundBuffer;
+    sf::Sound enemySound;
 };
 
 #endif

@@ -4693,7 +4693,7 @@
 	<SFML/System/Time.hpp>
 	<SFML/System/Clock.hpp>
 
-1530389208 /home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.h
+1530477084 /home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.h
 	"GameState.h"
 	"Sprite.h"
 	"InputManager.h"
@@ -4738,12 +4738,13 @@
 	<map>
 	<SFML/Graphics.hpp>
 
-1530394004 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.cpp
+1530473343 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PlayState.cpp
 	<iostream>
 	<cmath>
 	"Game.h"
 	"PlayState.h"
 	"PauseState.h"
+	"GameOverState.h"
 	"InputManager.h"
 
 1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/tmx/MapLoader.h
@@ -4771,7 +4772,7 @@
 1522099715 /home/matheus/Documentos/RiverRaid/Source/lib/CGF/include/Debug.h
 	<iostream>
 
-1530393942 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PauseState.cpp
+1530394073 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PauseState.cpp
 	<iostream>
 	<cmath>
 	"Game.h"
@@ -4781,5 +4782,18 @@
 1530393928 /home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/PauseState.h
 	"GameState.h"
 	"Sprite.h"
+	"InputManager.h"
+
+1530473619 /home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/GameOverState.h
+	"GameState.h"
+	"Sprite.h"
+	"InputManager.h"
+
+1530474936 source:/home/matheus/Documentos/RiverRaid/Source/examples/RiverRaid/GameOverState.cpp
+	<iostream>
+	<cmath>
+	"Game.h"
+	"GameOverState.h"
+	"PlayState.h"
 	"InputManager.h"
 

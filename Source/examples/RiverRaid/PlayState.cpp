@@ -12,6 +12,7 @@
 #include "Game.h"
 #include "PlayState.h"
 #include "PauseState.h"
+#include "GameOverState.h"
 #include "InputManager.h"
 
 PlayState PlayState::m_PlayState;
@@ -75,6 +76,15 @@ void PlayState::init()
     dirx = 0;
     lastEnemyPos = 400;
 
+    gunSoundBuffer.loadFromFile("data/audio/gun.wav");
+    gunSound.setBuffer(gunSoundBuffer);
+
+    fuelSoundBuffer.loadFromFile("data/audio/superjump.wav");
+    fuelSound.setBuffer(fuelSoundBuffer);
+
+    enemySoundBuffer.loadFromFile("data/audio/enemy.wav");
+    enemySound.setBuffer(enemySoundBuffer);
+
     im = cgf::InputManager::instance();
 
     im->addKeyInput("left", sf::Keyboard::Left);
@@ -123,6 +133,11 @@ void PlayState::handleEvents(cgf::Game* game)
             bulletSprite.setPosition(xPos, playSprite1.getPosition().y);
             bulletSprite.setYspeed(-300.0);
             bullets.push_back(bulletSprite);
+
+            if(gunSound.getStatus() == sf::Sound::Playing) {
+                gunSound.stop();
+            }
+            gunSound.play();
         }
     }
 
@@ -159,7 +174,7 @@ void PlayState::update(cgf::Game* game)
     if (fuelLeft <= 0) {
         fuelLeft = 1.0;
         lifesLeft--;
-        if (lifesLeft < 0) game->quit();
+        if (lifesLeft < 0) game->changeState(GameOverState::instance());
         else lifesText.setString(std::to_string(lifesLeft));
     } else {
         fuelLeft -= 0.001;
@@ -172,7 +187,7 @@ void PlayState::update(cgf::Game* game)
         playSprite1.setPosition(369, 430);
         enemies.clear();
         fuelTanks.clear();
-        if (lifesLeft < 0) game->quit();
+        if (lifesLeft < 0) game->changeState(GameOverState::instance());
         else lifesText.setString(std::to_string(lifesLeft));
     }
 
@@ -180,6 +195,7 @@ void PlayState::update(cgf::Game* game)
         bool isErased = false;
         for(int j = 0; j < enemies.size(); j++) {
             if (bullets[i].bboxCollision(enemies[j])) {
+                enemySound.play();
                 bullets.erase(bullets.begin() + i);
                 enemies.erase(enemies.begin() + j);
                 isErased = true;
@@ -211,7 +227,7 @@ void PlayState::update(cgf::Game* game)
         if (playSprite1.circleCollision(enemies[i])) {
             enemies.erase(enemies.begin() + i);
             lifesLeft--;
-            if (lifesLeft < 0) game->quit();
+            if (lifesLeft < 0) game->changeState(GameOverState::instance());
             else lifesText.setString(std::to_string(lifesLeft));
         } else if (enemies[i].getPosition().y + enemies[i].getSize().y >= 600) {
             enemies.erase(enemies.begin() + i);
@@ -227,6 +243,7 @@ void PlayState::update(cgf::Game* game)
 
     for(int i = 0; i < fuelTanks.size(); i++) {
         if(playSprite1.circleCollision(fuelTanks[i])) {
+            fuelSound.play();
             fuelTanks.erase(fuelTanks.begin() + i);
             fuelLeft = min(fuelLeft + 0.2, 1.0);
             sf::Vector2f fuelSize(300 * fuelLeft, 50);
